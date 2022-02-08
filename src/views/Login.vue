@@ -32,14 +32,14 @@
         <v-text-field
         outlined dense
           color="primary"
-          label="Email"
+          label="email"
           v-model="usuario.email"
         ></v-text-field>
 
         <v-text-field
           @keyup.enter="logar"
            outlined dense
-          label="Senha"
+          label="password"
           v-model="usuario.senha"
           :append-icon="value ? 'visibility_off' : 'visibility'"
           @click:append="() => (value = !value)"
@@ -47,11 +47,19 @@
         ></v-text-field>
         
           <v-btn color="primary" @click="logar" type="button" class="btn-entrar">
-            Entrar
+            Login
           </v-btn>
         
-        <div class="lembrar-senha">
-          <a @click="recuperarSenha()">Esqueci minha senha</a>
+        <div class="lembrar-senha">         
+          <a @click="recuperarSenha()">forgot password?</a>
+        </div>
+        <div class="strike">
+          <span>or</span>
+        </div>
+        <div class="sing-up">
+          <span>Don't have a login? 
+            <a @click="criarConta()">Sing up</a>
+          </span>
         </div>
       </form>
     </v-card>
@@ -138,11 +146,10 @@ export default {
   font-size: 39px;
   font-weight: 800;
   text-align: center;
-
   display: block;
   height: 90px;
   margin: auto auto;
-  margin-top: 35px;
+  margin-top: 30px;
 }
 
 .btn-entrar {
@@ -169,8 +176,48 @@ export default {
     font-size: 12px;
     margin-top: 10px;
 }
+.sing-up {    
+    text-align: center;
+    font-size: 15px;
+    margin-top: 10px;
+}
 
 div {
   width: 100%;
+}
+
+.strike {
+    display: block;
+    text-align: center;    
+    font-size: 15px;
+    color: grayscale($color: #a8a7a7);
+    overflow: hidden;
+    white-space: nowrap; 
+    margin-top: 20px;
+}
+
+.strike > span {
+    position: relative;
+    display: inline-block;
+}
+
+.strike > span:before,
+.strike > span:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 9999px;
+    height: 1px;
+    background: grayscale($color: #c4c1c1);
+}
+
+.strike > span:before {
+    right: 100%;
+    margin-right: 10px;
+}
+
+.strike > span:after {
+    left: 100%;
+    margin-left: 10px;
 }
 </style>
