@@ -126,10 +126,10 @@ export default {
 
 .box-login {
   background-color:  #ffffff;
-  width: 300px;
+  width: 400px;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 60px;
+  margin-top: 40px;
   padding:30px;
   border-radius: 4px;
 }
