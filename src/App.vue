@@ -18,24 +18,36 @@
           min-width="100"
           :src="require('./assets/project-name.svg')"     
           width="200"
-        />
+        />        
       </div>
-
+      
       <v-spacer></v-spacer>
 
       <v-btn
         href="https://github.com/raphapacheco/vuejs-project"
         target="_blank"
         text
-      >
-        <span class="mr-2">github</span>        
+      >      
         <v-img
-          :src="require('./assets/github.svg')"                
+          alt="Vuetify Signature"
+          class="shrink"          
+          contain          
+          :src="require('./assets/assinatura.svg')"     
+          min-width="100"
+          width="170"
+          transition="scale-transition"
+        />     
+        <v-img
+          :src="require('./assets/github.svg')" 
+          min-width="25"
+          width="40" 
+          transition="scale-transition"           
         />
       </v-btn>
     </v-app-bar>
 
     <v-main>
+       {{ mensagem }}
       <router-view />
     </v-main>
   </v-app>

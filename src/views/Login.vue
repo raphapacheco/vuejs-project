@@ -1,68 +1,53 @@
 <template>
   <v-container>
-     <v-snackbar
-      v-model="snackbar"
-      :vertical="false"
-      :timeout="timeout"
-      top="top"
-      :color="tipo"
-      elevation="5"
-      multi-line
-      right
-      shaped
-    >
-      {{ mensagem }}
-      <template v-slot:action="{ attrs }">
-        <v-btn
-          text
-          v-bind="attrs"
-          @click="snackbar = false"
-          >OK</v-btn
-        >
-      </template>
-     </v-snackbar>
+     <SnackbarMensagem :snackbar=snackbar :tipo=tipo :mensagem=mensagem  />      
     <v-row>
-      <v-card :loading="loading" class="box-login" elevation="10">
-      <div class="logo">
-        <!-- <img src="colocar imagem aqui" alt=""> -->
-        Sign In
-      </div>
+      <v-card :loading="loading" class="box-login" elevation="10">      
+          <div class="d-flex align-center justify-center logo">                
+            <v-img
+              :src="require('../assets/logo.svg')"  
+              class="shrink mr-2"        
+              contain
+              width="40"              
+            />
+            Sign In              
+          </div>
+        <form class="form-login" autocomplete="off">
+          <v-text-field
+          outlined dense
+            color="primary"
+            label="email"
+            v-model="usuario.email"
+          ></v-text-field>
 
-      <form class="form-login" autocomplete="off">
-        <v-text-field
-        outlined dense
-          color="primary"
-          label="email"
-          v-model="usuario.email"
-        ></v-text-field>
-
-        <v-text-field
-          @keyup.enter="logar"
-           outlined dense
-          label="password"
-          v-model="usuario.senha"
-          :append-icon="value ? 'visibility_off' : 'visibility'"
-          @click:append="() => (value = !value)"
-          :type="value ? 'password' : 'text'"
-        ></v-text-field>
-        
-          <v-btn color="primary" @click="logar" type="button" class="btn-entrar">
-            Login
-          </v-btn>
-        
-        <div class="lembrar-senha">         
-          <a @click="recuperarSenha()">forgot password?</a>
-        </div>
-        <div class="strike">
-          <span>or</span>
-        </div>
-        <div class="sing-up">
-          <span>Don't have a login? 
-            <a @click="criarConta()">Sing up</a>
-          </span>
-        </div>
-      </form>
-    </v-card>
+          <v-text-field
+            @keyup.enter="logar"
+            outlined dense
+            label="password"
+            v-model="usuario.senha"
+            :append-icon="value ? 'visibility_off' : 'visibility'"
+            @click:append="() => (value = !value)"
+            :type="value ? 'password' : 'text'"
+          ></v-text-field>
+          
+            <v-btn color="primary" @click="logar" type="button" class="btn-entrar">
+              Login
+            </v-btn>
+          
+          <div class="lembrar-senha">         
+            <a @click="recuperarSenha()">forgot password?</a>
+          </div>
+          
+          <div class="strike">
+            <span>or</span>
+          </div>
+          <div class="sing-up">
+            <span>Don't have a login? 
+              <a @click="criarConta()">Sing up</a>
+            </span>
+          </div>
+        </form>
+      </v-card>
     </v-row>
   </v-container>
 
@@ -70,16 +55,18 @@
 </template>
 <script>
 
-//import utilsStorage from "@/utils/storage";
-//import mixinMensagen from "@/mixin/mixin-mensagem";
+import utilsStorage from "@/utils/storage";
+import SnackbarMensagem from "@/components/SnackbarMensagem";
+import mixinMensagen from "@/mixin/mixin-mensagem";
 import UsuarioModel from "@/model/usuario-model";
-//import apiUsuario from "@/api/usuario/usuario-api";
-//import { MENSAGENS } from "@/constants/mensagens";
+import apiAuth from "@/api/auth/auth-api";
+import { MENSAGENS } from "@/constants/messages";
 
 
 export default {
   name: "login",
-  //mixins: [mixinMensagen],
+  mixins: [mixinMensagen],
+  components: { SnackbarMensagem },
   data() {
     return {
       loading: false,
@@ -92,12 +79,12 @@ export default {
 
     logar() {
       if (!this.usuario.email || !this.usuario.senha) {
-        //this.dispararMensagem(MENSAGENS.INFORME_EMAIL_E_SENHA, "error");
+        this.dispararMensagem(MENSAGENS.INFORME_EMAIL_E_SENHA, "error");
         return;
       }
 
       this.loading = true;
-      /*apiUsuario
+      apiAuth
         .logar(this.usuario)
         .then((response) => {
           this.loading = false;
@@ -116,13 +103,13 @@ export default {
           );
           utilsStorage.removerAutenticacao();
           this.loading = false;
-        });*/
+        });
     },    
   },
    
   mounted(){         
     if (this.$route.query && this.$route.query.exibirMensagemExpiracao) { 
-      //this.dispararMensagem(MENSAGENS.SESSAO_EXPIRADA, "error");
+      this.dispararMensagem(MENSAGENS.SESSAO_EXPIRADA, "error");
     }                 
   },  
 
@@ -142,25 +129,25 @@ export default {
   border-radius: 4px;
 }
 
-.logo {
-  font-size: 39px;
-  font-weight: 800;
+.logo {  
+  font-size: 40px;
+  font-weight: 800;    
   text-align: center;
   display: block;
   height: 90px;
   margin: auto auto;
-  margin-top: 30px;
+  margin-top: 20px;
+  transition: scale-transition;
 }
 
 .btn-entrar {
-  width: 100%;
-  
+  width: 100%;  
   border: 0px;
   padding: 15px;
+  font-size: 15px;
   font-weight: 600;
   border: 1px solid #ddd;
-  margin-top: 25px;
-  
+  margin-top: 20px;
 }
 
 .btn-entrar:hover {
