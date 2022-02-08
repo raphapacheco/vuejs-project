@@ -1,6 +1,5 @@
 <template>
-  <v-container>
-     <SnackbarMensagem :snackbar=snackbar :tipo=tipo :mensagem=mensagem  />      
+  <v-container>     
     <v-row>
       <v-card :loading="loading" class="box-login" elevation="10">      
           <div class="d-flex align-center justify-center logo">                
@@ -56,17 +55,13 @@
 <script>
 
 import utilsStorage from "@/utils/storage";
-import SnackbarMensagem from "@/components/SnackbarMensagem";
-import mixinMensagen from "@/mixin/mixin-mensagem";
 import UsuarioModel from "@/model/usuario-model";
 import apiAuth from "@/api/auth/auth-api";
 import { MENSAGENS } from "@/constants/messages";
-
+import { exibirMensagem } from "../actions";
 
 export default {
   name: "login",
-  mixins: [mixinMensagen],
-  components: { SnackbarMensagem },
   data() {
     return {
       loading: false,
@@ -79,7 +74,7 @@ export default {
 
     logar() {
       if (!this.usuario.email || !this.usuario.senha) {
-        this.dispararMensagem(MENSAGENS.INFORME_EMAIL_E_SENHA, "error");
+        exibirMensagem(MENSAGENS.INFORME_EMAIL_E_SENHA, "error");        
         return;
       }
 
@@ -94,7 +89,7 @@ export default {
           this.$router.push({ name: "Dashboard" });
         })
         .catch((error) => {
-          this.dispararMensagem(
+          exibirMensagem(
             (error.response &&
               error.response.data &&
               error.response.data.mensagem) ||
@@ -109,7 +104,7 @@ export default {
    
   mounted(){         
     if (this.$route.query && this.$route.query.exibirMensagemExpiracao) { 
-      this.dispararMensagem(MENSAGENS.SESSAO_EXPIRADA, "error");
+      exibirMensagem(MENSAGENS.SESSAO_EXPIRADA, "error");
     }                 
   },  
 
