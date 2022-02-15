@@ -35,8 +35,8 @@
           
           <div class="lembrar-senha">         
             <a @click="recuperarSenha()">forgot password?</a>
-          </div>
-          
+          </div>                    
+
           <div class="strike">
             <span>or</span>
           </div>
@@ -58,7 +58,7 @@ import utilsStorage from "@/utils/storage";
 import UsuarioModel from "@/model/usuario-model";
 import apiAuth from "@/api/auth/auth-api";
 import { MENSAGENS } from "@/constants/messages";
-import { exibirMensagem } from "../actions";
+import { exibirMensagem } from "@/actions";
 
 export default {
   name: "login",
