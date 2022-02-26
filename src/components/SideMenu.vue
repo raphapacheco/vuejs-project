@@ -27,7 +27,7 @@
             <v-list-item-icon>
             <v-icon>{{ child.icon }}</v-icon>
           </v-list-item-icon>
-          <v-list-item-title> {{ child.title}}</v-list-item-title>
+          <v-list-item-title> {{ child.title}} </v-list-item-title>
 
           </v-list-item>
         </v-list-group>
@@ -58,11 +58,10 @@ export default {
     return {
       items: [
         {
-          title: "Users",
-          action: "mdi-account",
+          title: "Configs",
+          action: "mdi-cogs",
           items: [
-            { title: "Search", path:"/usuario/consulta", icon:"mdi-account-search" },
-            { title: "Add", path:"/usuario/cadastro", icon:"mdi-account-plus" },
+            { title: "Users", path:"/user", icon:"mdi-account-cog" },            
           ],          
         },        
       ],

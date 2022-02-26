@@ -15,7 +15,9 @@
         <h1 class="display-2 font-weight-bold mb-3 ">Welcome to VueJs Project</h1>
 
         <p class="subheading font-weight-regular">
-          A simple project developed with the VueJs framework    
+          A simple project developed with the VueJs framework 
+          <br/>
+          <a href="https://github.com/raphapacheco/vuejs-project">See on Github</a>   
         </p>
       </v-col>
       
@@ -23,5 +25,3 @@
   </v-container>
   
 </template>
-
-<style lang="scss" scoped>

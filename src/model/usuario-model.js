@@ -6,16 +6,21 @@ class UsuarioModel {
     this.login = obj.login;
     this.email = obj.email;
     this.senha = obj.senha;
-    this.funcao = obj.funcao;
-    this.perfil = obj.perfil;
-    this.foto = obj.foto;
-    this.idCliente = obj.idCliente;
+    this.cpf = obj.cpf;
+    this.cnpj = obj.cnpj;
+    this.celular = obj.celular;
     this.criadoEm = obj.criadoEm;
     this.atualizadoEm = obj.atualizadoEm;
   }
 
   modeloValido() {
-    return !!(this.nome && this.email && this.senha && this.perfil);
+    return !!(
+      this.nome &&
+      this.email &&
+      this.senha &&
+      this.celular &&
+      (this.cpf || this.cnpj)
+    );
   }
 }
 

@@ -5,6 +5,7 @@ const MENSAGENS = {
   FALHA_COMUNICACAO_SERVIDOR: "Não foi possível se comunicar com o servidor!",
   SESSAO_EXPIRADA:
     "Sua sessão expirou, será necessário efetuar Login novamente!",
+  CAMPOS_OBRIGATORIOS: "Preencha os campos obrigatórios!",
 };
 
 export { MENSAGENS };

@@ -1,11 +1,15 @@
 import api from "../api";
+import { exibirMensagem } from "@/actions";
 
-function obterTodos() {
+function obterPaginado(pagina, tamanho) {
   return new Promise((resolve, reject) => {
     return api
-      .get("/usuario")
+      .get("/usuario", { params: { pagina: pagina, tamanho: tamanho } })
       .then((response) => resolve(response))
-      .catch((error) => reject(error));
+      .catch((error) => {
+        console.log(error);
+        reject(error);
+      });
   });
 }
 
@@ -15,7 +19,17 @@ function cadastrar(usuario) {
     return api
       .post("/usuario", usuario)
       .then((response) => resolve(response))
-      .catch((error) => reject(error));
+      .catch((error) => {
+        if (error.response.data.erros) {
+          var msg = "Verifique os campos: ";
+          error.response.data.erros.forEach((erro) => {
+            msg += erro.campo + ", ";
+          });
+
+          exibirMensagem(msg.substring(0, msg.length - 2), "error");
+        }
+        reject(error);
+      });
   });
 }
 
@@ -25,7 +39,17 @@ function atualizar(usuario) {
     return api
       .put(`/usuario/${usuario.id}`, usuario)
       .then((response) => resolve(response))
-      .catch((error) => reject(error));
+      .catch((error) => {
+        if (error.response.data.erros) {
+          var msg = "Verifique os campos: ";
+          error.response.data.erros.forEach((erro) => {
+            msg += erro.campo + ", ";
+          });
+
+          exibirMensagem(msg.substring(0, msg.length - 2), "error");
+        }
+        reject(error);
+      });
   });
 }
 
@@ -51,7 +75,7 @@ function redefinirSenha(email) {
 }
 
 export default {
-  obterTodos,
+  obterPaginado,
   cadastrar,
   atualizar,
   deletar,
