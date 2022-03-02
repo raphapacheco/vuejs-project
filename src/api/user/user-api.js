@@ -37,7 +37,7 @@ function atualizar(usuario) {
   usuario = usuario || {};
   return new Promise((resolve, reject) => {
     return api
-      .put(`/usuario/${usuario.id}`, usuario)
+      .put(`/usuario`, usuario)
       .then((response) => resolve(response))
       .catch((error) => {
         if (error.response.data.erros) {

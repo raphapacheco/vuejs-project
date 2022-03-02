@@ -11,6 +11,7 @@ class UsuarioModel {
     this.celular = obj.celular;
     this.criadoEm = obj.criadoEm;
     this.atualizadoEm = obj.atualizadoEm;
+    this.ativo = obj.ativo;
   }
 
   modeloValido() {

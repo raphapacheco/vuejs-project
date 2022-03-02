@@ -6,6 +6,8 @@ const MENSAGENS = {
   SESSAO_EXPIRADA:
     "Sua sessão expirou, será necessário efetuar Login novamente!",
   CAMPOS_OBRIGATORIOS: "Preencha os campos obrigatórios!",
+  USUARIO_REMOVIDO: "Usuário removido!",
+  USUARIO_BLOQUEADO: "Usuário bloqueado!",
 };
 
 export { MENSAGENS };
