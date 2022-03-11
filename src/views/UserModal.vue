@@ -78,7 +78,8 @@
                     :counter="14"
                     maxlength="14"
                     label="CPF"
-                    :rules="[rules.required]"
+                    :rules="[rules.required]"                    
+                    v-mask="'###.###.###-##'"
                   ></v-text-field>
                 </v-col>
               </v-row> 
@@ -91,6 +92,7 @@
                     maxlength="18"
                     label="CNPJ"
                     :rules="[rules.required]"
+                    v-mask="'##.###.###/####-##'"
                   ></v-text-field>
                 </v-col>
               </v-row> 
@@ -99,9 +101,10 @@
                 <v-col cols="12" lg="12">
                   <v-text-field
                     v-model="usuario.celular"
-                    :counter="17"
-                    maxlength="17"
-                    label="Celular"
+                    :counter="16"
+                    maxlength="16"
+                    label="Celular"                    
+                    v-mask="'(##) 9 ####-####'"
                     :rules="[rules.required]"
                   ></v-text-field>
                 </v-col>
@@ -116,7 +119,7 @@
               <v-btn class="btn-primary" text @click="save">
                 Salvar
               </v-btn>
-                <v-btn color="primary" text @click="close">
+                <v-btn color="primary" text @click="closeModal">
                 Cancelar
               </v-btn>
             </v-card-actions>
@@ -128,22 +131,23 @@
 </template>
 
 <script>
-import UsuarioModel from "@/model/usuario-model";
+
 import UserApi from "@/api/user/user-api";
 import { MENSAGENS } from "@/constants/messages";
 import { exibirMensagem } from "@/actions";
 
 export default {
   name: "userModal",
-  props: { exibirModal: {type: Boolean, required: true}, idUsuario: {type: String} },
+  props: { exibirModal: { type: Boolean, required: true }, usuario: { required: true } },
   data() {
     return {
-      usuario: new UsuarioModel(),
+      valid: null,
+      modalAberto: false,
       exibirSenha: 'password',
       exibirConfirmacao: 'password',
       rules: {
         required: value => !!value || 'Required',
-        minLength5: value => value.length >= 5 || 'Min 5 characters',
+        minLength5: value => (value && (value?.length  >= 5)) || 'Min 5 characters',
         email: value => {
           const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
           return pattern.test(value) || 'Invalid e-mail.'
@@ -152,24 +156,29 @@ export default {
     };
   },
   methods: {
-    close() {
+    closeModal() {
+      this.modalAberto = false;
       this.$emit("input", !this.exibirModal);
     },
     
-    save(){
+    async save(){
       if (this.usuario.modeloValido())
-      {
-        if(!this.usuario.id)
+      {                        
+        if (!this.usuario.id)
         {
-          UserApi.cadastrar(this.usuario);
-          return;
+          var retorno =await UserApi.cadastrar(this.usuario); 
+          this.usuario.id = retorno.data.id;                   
+        }
+        else
+        {
+          await UserApi.atualizar(this.usuario);           
         }
 
-        UserApi.atualizar(this.usuario);   
-        return;     
+        this.$emit("atualizar-usuario", this.usuario); 
+        this.closeModal();    
       }      
 
-      exibirMensagem(MENSAGENS.CAMPOS_OBRIGATORIOS, "error");
+      exibirMensagem(MENSAGENS.CAMPOS_OBRIGATORIOS, "error");      
     }           
   },
 };

@@ -1,6 +1,6 @@
 <template>  
   <v-layout row justify-center>
-    <UserModal v-model="exibirModal" :exibirModal="exibirModal"/>
+    <UserModal v-model="exibirModal" :exibirModal="exibirModal" :usuario="usuarioSelecionado" @atualizar-usuario="atualizarUsuario"/>
     <v-flex xs12 sm8>        
 
       <v-card elevation="5">
@@ -9,23 +9,22 @@
           <v-icon large>person</v-icon>      
           <v-toolbar-title class="ml-1">Users</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn icon @click="exibirModal = !exibirModal">
+          <v-btn icon @click="novoUsuario()">
             <v-icon>person_add</v-icon>
           </v-btn>          
         </v-toolbar>
 
-        <v-list two-line>
+        <v-list two-line min-height="345">
           <template v-for="(usuario, index) in usuarios">
 
             <v-list-item :key="index" avatar ripple @click="exibirModal = exibirModal">    
               
-              <v-list-item-content @click="exibirModal = !exibirModal">
+              <v-list-item-content @click="abrirModal(usuario)">
 
                 <v-list-item-title class="title">{{ usuario.nome }}</v-list-item-title>
                 <v-list-item-title class="subtitle">
                   E-mail: {{ usuario.email }} | CPF: {{ usuario.cpf }}
                 </v-list-item-title>
-
 
               </v-list-item-content>    
               
@@ -79,10 +78,19 @@
              
             </v-list-item>
             
-            <v-divider v-if="index + 1 < usuarios.length" :key="`divider-${index}`"></v-divider>
+            <v-divider v-if="index < 4" :key="`divider-${index}`"></v-divider>
           </template>
         </v-list>
-
+        <v-divider/>        
+        <v-layout justify-end>
+          <v-pagination
+            v-if="totalPaginas > 1"
+            v-model="pagina"
+            :length="totalPaginas"
+            :total-visible="7"
+            @input="atualizarPagina(pagina)"          
+          ></v-pagination>        
+        </v-layout>
       </v-card> 
 
     </v-flex>
@@ -92,6 +100,7 @@
 <script>
 
 import UserModal from "@/views/UserModal";
+import UsuarioModel from "@/model/usuario-model";
 import UserApi from "@/api/user/user-api";
 import { MENSAGENS } from "@/constants/messages";
 import { exibirMensagem } from "@/actions";
@@ -101,10 +110,13 @@ export default {
   name: "user",
   data() {
     return {
+      usuarioSelecionado: new UsuarioModel(),
       bloquear: false,
       exibirModal: false,
       loading: false,
       usuarios: [],
+      totalPaginas: 0,
+      pagina: 1,
       value: 'password'
     };
   },
@@ -120,14 +132,43 @@ export default {
         usuario.ativo = !usuario.ativo;
         await UserApi.atualizar(usuario);
         exibirMensagem(MENSAGENS.USUARIO_BLOQUEADO, "success");      
-    }
-  },
-   
-  async mounted(){         
-    var retorno = await UserApi.obterPaginado(1, 10);    
-    this.usuarios = retorno.data.itens;
-  },  
+    },
 
+    atualizarUsuario(usuario){
+      var index = this.usuarios.findIndex((usr => usr.id == usuario.id));
+      
+      if (index >= 0)
+      {
+        this.usuarios[index] = usuario;
+        return;
+      }
+
+      this.usuarios.push(usuario);
+    },
+
+    abrirModal(usuario)
+    {
+       this.exibirModal = !this.exibirModal; 
+       this.usuarioSelecionado = new UsuarioModel(usuario);
+    },
+    
+    novoUsuario()
+    {
+       this.exibirModal = !this.exibirModal; 
+       this.usuarioSelecionado = new UsuarioModel();
+    },
+
+    async atualizarPagina(pagina){         
+      var retorno = await UserApi.obterPaginado(pagina, 5);    
+      this.usuarios = retorno.data.itens;
+      this.totalPaginas = retorno.data.totalPaginas;
+      console.log(retorno);
+    },  
+  },
+
+  async mounted(){ 
+    this.atualizarPagina(1);
+  },     
 };
 
 </script>
@@ -139,8 +180,7 @@ export default {
   color: gray;
 }
 
-.title{
-  
+.title{  
   font-style: bold;
 }
 </style>
