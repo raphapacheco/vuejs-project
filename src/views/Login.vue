@@ -15,8 +15,9 @@
           <v-text-field
           outlined dense
             color="primary"
-            label="email"
-            v-model="usuario.email"
+            label="login"
+            v-model="usuario.login"
+            :rules="[rules.required, rules.minLength5]"
           ></v-text-field>
 
           <v-text-field
@@ -27,6 +28,7 @@
             :append-icon="value ? 'visibility_off' : 'visibility'"
             @click:append="() => (value = !value)"
             :type="value ? 'password' : 'text'"
+            :rules="[rules.required, rules.minLength6]"
           ></v-text-field>
           
             <v-btn color="primary" @click="logar" type="button" class="btn-entrar">
@@ -66,15 +68,20 @@ export default {
     return {
       loading: false,
       usuario: new UsuarioModel(),
-      value: 'password'
+      value: 'password',
+      rules: {
+        required: value => !!value || 'Required',
+        minLength5: value => (value && (value?.length  >= 5)) || 'Min 5 characters',
+        minLength6: value => (value && (value?.length  >= 6)) || 'Min 6 characters',
+      },
     };
   },
   
   methods: {
 
     logar() {
-      if (!this.usuario.email || !this.usuario.senha) {
-        exibirMensagem(MENSAGENS.INFORME_EMAIL_E_SENHA, "error");        
+      if (!this.usuario.login || !this.usuario.senha) {
+        exibirMensagem(MENSAGENS.INFORME_LOGIN_E_SENHA, "error");        
         return;
       }
 

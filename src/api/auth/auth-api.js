@@ -1,12 +1,17 @@
 import api from "../api";
+import utilsTripleDES from "@/utils/tripleDes";
 
 function logar(usuario) {
   usuario = usuario || {};
   return new Promise((resolve, reject) => {
-    var bodyFormData = new FormData();
+    let usuarioSenha = JSON.stringify({
+      username: usuario.login,
+      password: usuario.senha,
+    });
 
-    bodyFormData.append("username", usuario.email);
-    bodyFormData.append("password", usuario.senha);
+    let user = utilsTripleDES.Encrypt(usuarioSenha);
+    let bodyFormData = new FormData();
+    bodyFormData.append("user", user);
 
     return api
       .post("/auth/token", bodyFormData)

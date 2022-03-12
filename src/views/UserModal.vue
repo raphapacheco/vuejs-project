@@ -55,7 +55,7 @@
                     :counter="50"
                     maxlength="50"
                     label="Senha"
-                    :rules="[rules.required]"
+                    :rules="[rules.required, rules.minLength6]"
                   ></v-text-field>
                 </v-col>
               
@@ -66,7 +66,7 @@
                     :counter="50"
                     maxlength="50"
                     label="Confirmação"
-                    :rules="[rules.required]"
+                    :rules="[rules.required, rules.minLength6]"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -148,6 +148,7 @@ export default {
       rules: {
         required: value => !!value || 'Required',
         minLength5: value => (value && (value?.length  >= 5)) || 'Min 5 characters',
+        minLength6: value => (value && (value?.length  >= 6)) || 'Min 6 characters',
         email: value => {
           const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
           return pattern.test(value) || 'Invalid e-mail.'
